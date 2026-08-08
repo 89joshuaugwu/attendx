@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 import { adminDb } from "@/lib/firebase-admin";
 import { renderEmail, statRow } from "@/lib/server/emailLayout";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://attendx.vercel.app";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://attendx-ng.vercel.app";
 
 function getTransport() {
   const user = process.env.GMAIL_SMTP_USER;

@@ -1,7 +1,7 @@
-# RollMark
+# AttendX
 
 Intelligent QR-based attendance for Nigerian university lecturers and students.
-Built from `RollMark_DESIGN.md` (UX/visual spec) + `RollMark_CONTEXT.md`/`RollMark_PROMPT.md`
+Built from `AttendX_DESIGN.md` (UX/visual spec) + `AttendX_CONTEXT.md`/`AttendX_PROMPT.md`
 (architecture spec, included in this repo for reference) —
 Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · React 19 · Firebase.
 
@@ -74,7 +74,7 @@ which bypasses these rules by design.
 
 - Firebase client SDK handles sign-in in the browser (email/password + Google).
 - On every auth state change, the client calls `POST /api/auth/session` with a fresh ID
-  token, which verifies it via `firebase-admin` and sets an httpOnly `rollmark_session`
+  token, which verifies it via `firebase-admin` and sets an httpOnly `attendx_session`
   cookie (14-day expiry, cleared via `DELETE` on sign-out).
 - **`src/proxy.ts`** (Next.js 16 renamed `middleware.ts` → `proxy.ts` — see
   [nextjs.org/docs/messages/middleware-to-proxy](https://nextjs.org/docs/messages/middleware-to-proxy))
@@ -198,5 +198,3 @@ src/
    activates automatically on Vercel.
 5. Manually publish `firestore.rules` in the Firebase Console (see §2) — separate from
    the Vercel deploy, easy to forget.
-#   a p p e n d x  
- 

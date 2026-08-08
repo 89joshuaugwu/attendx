@@ -4,7 +4,6 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { PublicShell } from "@/components/shells/PublicShell";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -71,17 +70,13 @@ export default function LecturerSignupPage() {
   };
 
   return (
-    <PublicShell>
+    <PublicShell variant="auth">
       <div className="flex min-h-[calc(100vh-72px)] w-full max-w-md flex-col justify-center py-8 md:max-w-lg">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="mb-6 flex items-center gap-2 md:hidden">
-            <Image src="/logo.png" alt="AttendX" width={26} height={26} />
-            <span className="text-lg font-bold">AttendX</span>
-          </div>
           <h2 className="text-2xl font-bold">Create your account</h2>
           <p className="mt-1.5 text-sm text-text-secondary">
             Set up attendance sessions for your courses in minutes.
@@ -94,7 +89,7 @@ export default function LecturerSignupPage() {
               autoComplete="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Dr. T. Asogwa"
+              placeholder="Full name"
             />
             <Input
               label="Email"

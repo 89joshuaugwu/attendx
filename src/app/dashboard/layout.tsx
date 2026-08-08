@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 
 async function requireSession() {
   const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("rollmark_session")?.value;
+  const sessionCookie = cookieStore.get("attendx_session")?.value;
 
   if (!sessionCookie) redirect("/auth/lecturer-login");
 

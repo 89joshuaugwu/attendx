@@ -5,7 +5,7 @@ project has hit traced back to the one idea in this document.
 
 ## The single most important concept: two separate pathways
 
-RollMark has exactly two kinds of people who ever touch it, and they reach
+AttendX has exactly two kinds of people who ever touch it, and they reach
 the database through **two completely different, deliberately separate
 pathways**:
 

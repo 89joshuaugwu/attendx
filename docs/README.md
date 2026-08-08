@@ -1,6 +1,6 @@
-# RollMark — Project Documentation
+# AttendX — Project Documentation
 
-Welcome. This folder explains **everything about how RollMark works** — for
+Welcome. This folder explains **everything about how AttendX works** — for
 someone who has never seen the codebase, all the way through to a developer
 who needs to pick up where the previous person left off.
 
@@ -8,7 +8,7 @@ If you're new here, **read these in order**:
 
 | # | File | What it covers | Who it's for |
 |---|---|---|---|
-| 1 | [`01-overview.md`](./01-overview.md) | What RollMark is, who uses it, why it exists | Everyone — start here |
+| 1 | [`01-overview.md`](./01-overview.md) | What AttendX is, who uses it, why it exists | Everyone — start here |
 | 2 | [`02-tech-stack.md`](./02-tech-stack.md) | Every technology used and why | Non-technical + developers |
 | 3 | [`03-architecture.md`](./03-architecture.md) | How the pieces fit together, with diagrams | Developers |
 | 4 | [`04-data-model.md`](./04-data-model.md) | Every database collection, field by field | Developers |
@@ -22,7 +22,7 @@ If you're new here, **read these in order**:
 
 ## The one-paragraph version
 
-**RollMark is a QR-code-based attendance tracking web app**, built for
+**AttendX is a QR-code-based attendance tracking web app**, built for
 lecturers at Nigerian universities. A lecturer creates an "attendance
 session" for a class, a QR code appears on their screen, students scan it
 with their own phones, fill in a short form, and their attendance is recorded

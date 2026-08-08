@@ -1,15 +1,15 @@
 # 01 — Overview
 
-## What is RollMark?
+## What is AttendX?
 
-RollMark is a web application that replaces the old way lecturers take
+AttendX is a web application that replaces the old way lecturers take
 attendance in Nigerian university lecture halls — calling out registration
 numbers one by one, or passing round a sign-in sheet that anyone can sign on
 behalf of an absent friend.
 
 Instead:
 
-1. The lecturer opens RollMark on their laptop or phone and starts an
+1. The lecturer opens AttendX on their laptop or phone and starts an
    "attendance session" for a specific course.
 2. A QR code appears on their screen.
 3. Students scan it with their own phones' cameras.
@@ -35,7 +35,7 @@ This is a deliberate design choice, not an oversight — see
 
 The single biggest problem with any digital attendance system is the same
 problem as the paper sign-in sheet: **one student can mark attendance for
-students who aren't actually there.** RollMark layers several independent
+students who aren't actually there.** AttendX layers several independent
 defenses against this, each covering a different way someone might try to
 cheat:
 
@@ -70,7 +70,7 @@ significantly harder than defeating any single one.
   explicitly in the code, because the app's servers run in a different time
   zone (UTC) by default and would otherwise silently be an hour off.
 
-## What RollMark is *not*
+## What AttendX is *not*
 
 - It is **not** a learning management system — no assignments, no grades,
   no course content.

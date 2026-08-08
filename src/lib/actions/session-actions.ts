@@ -14,7 +14,7 @@ import type { GeoPoint } from "@/types";
  */
 async function requireOwnedSession(sessionId: string) {
   const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("rollmark_session")?.value;
+  const sessionCookie = cookieStore.get("attendx_session")?.value;
   if (!sessionCookie) throw new Error("Not authenticated.");
 
   const decoded = await adminAuth().verifySessionCookie(sessionCookie, true);

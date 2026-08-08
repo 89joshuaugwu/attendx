@@ -3,7 +3,7 @@ import { adminAuth } from "@/lib/firebase-admin";
 
 export const runtime = "nodejs";
 
-const COOKIE_NAME = "rollmark_session";
+const COOKIE_NAME = "attendx_session";
 const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
 
 export async function POST(req: Request) {

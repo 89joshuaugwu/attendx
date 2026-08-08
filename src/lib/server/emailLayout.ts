@@ -17,7 +17,7 @@
  * this is a separate rasterized asset kept in sync with logo.svg by hand.
  */
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://attendx.vercel.app";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://attendx-ng.vercel.app";
 const TURQUOISE = "#19B5A5";
 const INK = "#087F73";
 const BODY_BG = "#FFF9F0";
@@ -115,7 +115,7 @@ export function renderEmail(opts: {
           <tr>
             <td align="center" style="padding: 24px 16px 8px;">
               <p style="margin:0 0 6px; font-size:12px; color:${TEXT_MUTED};">
-                <a href="${APP_URL}" style="color:${TEXT_MUTED}; text-decoration:underline;">attendx.vercel.app</a>
+                <a href="${APP_URL}" style="color:${TEXT_MUTED}; text-decoration:underline;">attendx-ng.vercel.app</a>
                 &nbsp;·&nbsp;
                 <a href="${APP_URL}/dashboard/settings" style="color:${TEXT_MUTED}; text-decoration:underline;">
                   Notification settings

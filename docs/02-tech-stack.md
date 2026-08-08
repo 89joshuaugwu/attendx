@@ -1,6 +1,6 @@
 # 02 — Tech Stack
 
-Every technology used in RollMark, what it's for, and — where relevant — why
+Every technology used in AttendX, what it's for, and — where relevant — why
 it was chosen over alternatives.
 
 ## The big picture, in one sentence each

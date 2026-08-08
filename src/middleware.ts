@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { adminAuth } from "@/lib/firebase-admin";
 
-const COOKIE_NAME = "rollmark_session";
+const COOKIE_NAME = "attendx_session";
 
 /**
  * NOTE (2026-07): This was proxy.ts (Next.js 16's renamed middleware

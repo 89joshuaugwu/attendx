@@ -1,6 +1,6 @@
 # 04 — Data Model
 
-RollMark's database is **Firestore** — a NoSQL document database. Think of
+AttendX's database is **Firestore** — a NoSQL document database. Think of
 it as nested folders: a "collection" is a folder, a "document" is a file
 inside it, and a document can itself contain another collection (a
 sub-folder).
@@ -53,7 +53,7 @@ One document per course a lecturer manages (e.g. "PHY112 — Physics").
 | `code` | string | e.g. `"PHY112"` — always stored uppercase |
 | `name` | string | e.g. `"Physics"` |
 | `rosterCount` | number | How many students are in the uploaded roster |
-| `shareSlug` | string | The unique part of the static share link — `rollmark.vercel.app/s/{shareSlug}` |
+| `shareSlug` | string | The unique part of the static share link — `attendx-ng.vercel.app/s/{shareSlug}` |
 | `shareGeofenceEnabled` | boolean | Whether opening the share link requires being physically near the classroom |
 | `shareGeofence` | `{ center: GeoPoint, radiusMeters: number }` (optional) | The saved classroom location + allowed radius, only present if the above is `true` |
 | `createdAt` | number (timestamp) | |

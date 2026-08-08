@@ -1,6 +1,6 @@
 # 07 — API Routes
 
-RollMark has a small number of server API routes. All of them run on
+AttendX has a small number of server API routes. All of them run on
 Vercel's servers (`runtime = "nodejs"`), never in the browser, and all of
 them use `firebase-admin` for any database access — meaning **none of these
 routes are subject to `firestore.rules`**. Whatever a route allows is
@@ -101,13 +101,13 @@ signs up (any method).
 **Body:** `{ idToken }` — a fresh Firebase Auth ID token from the browser.
 
 **What it does:** verifies the token is genuine, then creates a 14-day
-httpOnly session cookie (`rollmark_session`) and sets it on the response.
+httpOnly session cookie (`attendx_session`) and sets it on the response.
 This cookie is what `middleware.ts` and `dashboard/layout.tsx` check on
 every subsequent request — see `05-auth-flow.md`.
 
 ## `DELETE /api/auth/session`
 
-**Called by:** logging out. Clears the `rollmark_session` cookie
+**Called by:** logging out. Clears the `attendx_session` cookie
 immediately.
 
 ---

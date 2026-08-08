@@ -42,7 +42,7 @@ sequenceDiagram
     B->>API: POST idToken
     API->>AD: verifyIdToken plus createSessionCookie
     AD-->>API: session cookie
-    API-->>B: Set-Cookie rollmark_session httpOnly
+    API-->>B: Set-Cookie attendx_session httpOnly
     B->>B: redirect to dashboard
 ```
 
@@ -71,7 +71,7 @@ redundant but isn't:
 
 1. **`middleware.ts`** runs first, on every request matching `/dashboard/*`
    or `/auth/*`, before any page code runs at all. It reads the
-   `rollmark_session` cookie and calls
+   `attendx_session` cookie and calls
    `adminAuth().verifySessionCookie()` to confirm it's still valid.
 2. **`dashboard/layout.tsx`** re-checks the exact same cookie again, inside
    the actual page render. This looks like duplicate work, but middleware
@@ -119,7 +119,7 @@ sequenceDiagram
 
     B->>FA: signOut
     B->>API: DELETE clears the cookie
-    API-->>B: Set-Cookie rollmark_session expires now
+    API-->>B: Set-Cookie attendx_session expires now
     B->>B: redirect to landing page
 ```
 
