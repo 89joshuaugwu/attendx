@@ -1,0 +1,71 @@
+rules_version = '2';
+
+// ⚠️ MANUAL PUBLISH REQUIRED ⚠️
+// Copy this file's contents into Firebase Console → Firestore Database →
+// Rules → paste → Publish. This cannot be automated from the app or CI —
+// same quirk as PenWork4Me. Nothing writes to production until you click
+// Publish yourself.
+//
+// Architecture note: students never touch Firestore directly. All public
+// attendance reads/writes go through /api/attend/[sessionId] using
+// firebase-admin, which bypasses these rules entirely (that's how the
+// Admin SDK works — full trusted-server access). These rules exist to
+// govern the lecturer's own authenticated client-side reads/writes only.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(lecturerId) {
+      return isSignedIn() && request.auth.uid == lecturerId;
+    }
+
+    // Lecturers can only read/write their own profile doc.
+    match /lecturers/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+
+    // Courses + roster subcollection belong to a lecturer. No public access
+    // at all — roster validation during attendance submission happens
+    // server-side via the Admin SDK in the API route, not through these
+    // rules.
+    match /courses/{courseId} {
+      allow read, update, delete: if isOwner(resource.data.lecturerId);
+      allow create: if isSignedIn() && request.resource.data.lecturerId == request.auth.uid;
+
+      match /roster/{regNumber} {
+        allow read, write: if isOwner(get(/databases/$(database)/documents/courses/$(courseId)).data.lecturerId);
+      }
+    }
+
+    // Sessions: only the owning lecturer reads/writes via the client SDK.
+    // Students never read session docs directly — the public /attend page
+    // fetches sanitized session info through the API route instead.
+    //
+    // Note: `allow read` covers both single-doc reads and list/query reads.
+    // Firestore evaluates isOwner() per document in a query's result set and
+    // rejects the whole query if any result would fail it — so a lecturer
+    // can only ever successfully query their own sessions. Do NOT add a
+    // separate blanket `allow list: if isSignedIn()` here — that would
+    // bypass the per-document isOwner check entirely and let any lecturer
+    // list every other lecturer's sessions.
+    match /sessions/{sessionId} {
+      allow read: if isOwner(resource.data.lecturerId);
+      allow create: if isSignedIn() && request.resource.data.lecturerId == request.auth.uid;
+      allow update, delete: if isOwner(resource.data.lecturerId);
+    }
+
+    // Attendance records: the lecturer can read their own, and can create
+    // records themselves (manual add in the live session board). Anonymous
+    // students cannot write here directly — their submissions go through
+    // the API route (Admin SDK), which bypasses these rules entirely after
+    // running full server-side fraud validation.
+    match /attendanceRecords/{recordId} {
+      allow read, update, delete: if isOwner(resource.data.lecturerId);
+      allow create: if isSignedIn() && request.resource.data.lecturerId == request.auth.uid;
+    }
+  }
+}

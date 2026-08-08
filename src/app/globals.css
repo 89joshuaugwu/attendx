@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@theme {
+  /* AttendX brand tokens */
+  --color-cream: #fff9f0;
+  --color-turquoise: #19b5a5;
+  --color-teal: #087f73;
+  --color-white: #ffffff;
+
+  /* Semantic aliases used throughout the app */
+  --color-bg: var(--color-cream);
+  --color-card: var(--color-white);
+  --color-text: var(--color-teal);
+  --color-text-secondary: #5c7d78;
+  --color-border: rgb(8 127 115 / 0.14);
+
+  /* Status colors (kept distinct from the two brand colors, tuned for light surfaces) */
+  --color-amber: #b76e00;
+  --color-lime: #1a9c6b;
+  --color-rose: #d94f4f;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-lg: 0.75rem;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-teal);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+* {
+  border-color: rgb(8 127 115 / 0.12);
+}
+
+::selection {
+  background-color: var(--color-turquoise);
+  color: #ffffff;
+}
+
+@media (max-width: 767px) {
+  button,
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cfe8e4;
+  border-radius: 8px;
+}
+
+/* Larger touch target for the geofence radius slider thumb — the native
+   default is too small to reliably drag on a phone. */
+.attendx-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background: var(--color-turquoise);
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 4px rgb(8 127 115 / 0.3);
+  cursor: pointer;
+}
+.attendx-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background: var(--color-turquoise);
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 4px rgb(8 127 115 / 0.3);
+  cursor: pointer;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.animate-shake {
+  animation: shake 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes qr-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.animate-qr-pulse {
+  animation: qr-pulse 1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
