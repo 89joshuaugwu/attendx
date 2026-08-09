@@ -13,11 +13,15 @@ import { getFirestore } from "firebase-admin/firestore";
 function getAdminApp(): App {
   if (getApps().length) return getApp();
 
-  const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
+  const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID?.trim().replace(/^"|"$/g, "");
+  const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL?.trim().replace(/^"|"$/g, "");
   // Private keys from env vars often have literal "\n" instead of real
-  // newlines once they pass through .env files / Vercel's dashboard.
-  const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  // newlines once they pass through .env files / Vercel's dashboard, and
+  // are sometimes pasted with the surrounding quotes from the downloaded
+  // JSON key file left in by mistake — strip both defensively.
+  const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.trim()
+    .replace(/^"|"$/g, "")
+    .replace(/\\n/g, "\n");
 
   if (!projectId || !clientEmail || !privateKey) {
     throw new Error(

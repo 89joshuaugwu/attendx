@@ -131,17 +131,20 @@ export function CourseList() {
           </p>
         </Card>
       ) : (
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           {courses.map((c) => (
             <Card key={c.id}>
               <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="font-semibold text-teal">
-                    {c.code} — {c.name}
-                  </p>
-                  <p className="mt-0.5 text-xs text-text-secondary">
-                    Students on roster: {c.rosterCount}
-                  </p>
+                <div className="flex min-w-0 items-start gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-turquoise/10 text-xs font-bold text-turquoise">
+                    {c.code.slice(0, 4)}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold text-teal">{c.name}</p>
+                    <p className="mt-0.5 text-xs text-text-secondary">
+                      {c.code} · {c.rosterCount} on roster
+                    </p>
+                  </div>
                 </div>
                 <button
                   onClick={() => handleDelete(c.id)}

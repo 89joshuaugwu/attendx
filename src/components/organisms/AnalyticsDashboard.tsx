@@ -10,7 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { AlertTriangle, FileText } from "lucide-react";
+import { AlertTriangle, FileText, CalendarDays, Users, TrendingUp } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { getCourses, listSessions, getAllRecordsForLecturer } from "@/lib/firestore";
 import { exportAnalyticsPdf } from "@/lib/pdfExport";
@@ -143,95 +143,112 @@ export function AnalyticsDashboard() {
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <Card>
-          <p className="text-xs text-text-secondary">Total sessions</p>
-          <p className="mt-1 text-2xl font-bold text-teal">{sessions.length}</p>
+        <Card className="flex items-start gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-turquoise/10 text-turquoise">
+            <CalendarDays className="h-4.5 w-4.5" />
+          </div>
+          <div>
+            <p className="text-xs text-text-secondary">Total sessions</p>
+            <p className="mt-0.5 text-2xl font-bold text-teal">{sessions.length}</p>
+          </div>
         </Card>
-        <Card>
-          <p className="text-xs text-text-secondary">Students marked overall</p>
-          <p className="mt-1 text-2xl font-bold text-teal">{totalStudentsMarked}</p>
+        <Card className="flex items-start gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-turquoise/10 text-turquoise">
+            <Users className="h-4.5 w-4.5" />
+          </div>
+          <div>
+            <p className="text-xs text-text-secondary">Students marked overall</p>
+            <p className="mt-0.5 text-2xl font-bold text-teal">{totalStudentsMarked}</p>
+          </div>
         </Card>
-        <Card>
-          <p className="text-xs text-text-secondary">Avg. attendance rate</p>
-          <p className="mt-1 text-2xl font-bold text-teal">
-            {avgAttendanceRate !== null ? `${avgAttendanceRate}%` : "—"}
-          </p>
-          {avgAttendanceRate === null && (
-            <p className="mt-0.5 text-[11px] text-text-secondary">
-              Upload a roster to your courses to unlock this
+        <Card className="flex items-start gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-turquoise/10 text-turquoise">
+            <TrendingUp className="h-4.5 w-4.5" />
+          </div>
+          <div>
+            <p className="text-xs text-text-secondary">Avg. attendance rate</p>
+            <p className="mt-0.5 text-2xl font-bold text-teal">
+              {avgAttendanceRate !== null ? `${avgAttendanceRate}%` : "—"}
             </p>
-          )}
+            {avgAttendanceRate === null && (
+              <p className="mt-0.5 text-[11px] text-text-secondary">
+                Upload a roster to unlock this
+              </p>
+            )}
+          </div>
         </Card>
       </div>
 
-      <Card className="mt-5">
-        <h3 className="mb-3 text-sm font-semibold text-teal">Attendance by week</h3>
-        {trendData.length === 0 ? (
-          <p className="py-8 text-center text-sm text-text-secondary">
-            Not enough data yet — run a few sessions with a roster uploaded.
-          </p>
-        ) : (
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={trendData}>
-                <CartesianGrid stroke="#087F7320" strokeDasharray="3 3" />
-                <XAxis dataKey="week" stroke="#5c7d78" fontSize={12} />
-                <YAxis stroke="#5c7d78" fontSize={12} unit="%" domain={[0, 100]} />
-                <Tooltip
-                  contentStyle={{
-                    background: "#FFFFFF",
-                    border: "1px solid rgba(8,127,115,0.12)",
-                    borderRadius: 8,
-                    fontSize: 12,
-                    color: "#087F73",
-                  }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="attendance"
-                  stroke="#19B5A5"
-                  strokeWidth={2}
-                  dot={{ r: 3, fill: "#19B5A5" }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-      </Card>
+      <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-5">
+        <Card className="lg:col-span-3">
+          <h3 className="mb-3 text-sm font-semibold text-teal">Attendance by week</h3>
+          {trendData.length === 0 ? (
+            <p className="py-8 text-center text-sm text-text-secondary">
+              Not enough data yet — run a few sessions with a roster uploaded.
+            </p>
+          ) : (
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={trendData}>
+                  <CartesianGrid stroke="#087F7320" strokeDasharray="3 3" />
+                  <XAxis dataKey="week" stroke="#5c7d78" fontSize={12} />
+                  <YAxis stroke="#5c7d78" fontSize={12} unit="%" domain={[0, 100]} />
+                  <Tooltip
+                    contentStyle={{
+                      background: "#FFFFFF",
+                      border: "1px solid rgba(8,127,115,0.12)",
+                      borderRadius: 8,
+                      fontSize: 12,
+                      color: "#087F73",
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="attendance"
+                    stroke="#19B5A5"
+                    strokeWidth={2}
+                    dot={{ r: 3, fill: "#19B5A5" }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+        </Card>
 
-      <Card className="mt-5">
-        <div className="mb-3 flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4 text-amber" />
-          <h3 className="text-sm font-semibold text-teal">
-            {atRiskStudents.length} student{atRiskStudents.length === 1 ? "" : "s"} below 75%
-            attendance
-          </h3>
-        </div>
-        {atRiskStudents.length === 0 ? (
-          <p className="text-sm text-text-secondary">
-            No at-risk students detected yet, or not enough sessions have run.
-          </p>
-        ) : (
-          <div className="space-y-2">
-            {atRiskStudents.map((s) => (
-              <div
-                key={`${s.courseCode}-${s.regNumber}`}
-                className="flex items-center justify-between rounded-lg border border-teal/10 bg-cream px-3 py-2.5 text-sm"
-              >
-                <div className="min-w-0">
-                  <p className="truncate text-teal">{s.name}</p>
-                  <p className="text-xs text-text-secondary">
-                    {s.regNumber} · {s.courseCode}
-                  </p>
-                </div>
-                <span className="shrink-0 font-mono text-sm text-rose">
-                  {s.attended}/{s.total} · {s.pct}%
-                </span>
-              </div>
-            ))}
+        <Card className="lg:col-span-2">
+          <div className="mb-3 flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-amber" />
+            <h3 className="text-sm font-semibold text-teal">
+              {atRiskStudents.length} student{atRiskStudents.length === 1 ? "" : "s"} below 75%
+              attendance
+            </h3>
           </div>
-        )}
-      </Card>
+          {atRiskStudents.length === 0 ? (
+            <p className="text-sm text-text-secondary">
+              No at-risk students detected yet, or not enough sessions have run.
+            </p>
+          ) : (
+            <div className="max-h-72 space-y-2 overflow-y-auto pr-0.5">
+              {atRiskStudents.map((s) => (
+                <div
+                  key={`${s.courseCode}-${s.regNumber}`}
+                  className="flex items-center justify-between rounded-lg border border-teal/10 bg-cream px-3 py-2.5 text-sm"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-teal">{s.name}</p>
+                    <p className="text-xs text-text-secondary">
+                      {s.regNumber} · {s.courseCode}
+                    </p>
+                  </div>
+                  <span className="shrink-0 font-mono text-sm text-rose">
+                    {s.attended}/{s.total} · {s.pct}%
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+      </div>
     </div>
   );
 }

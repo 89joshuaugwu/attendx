@@ -175,7 +175,7 @@ export default function LandingPage() {
       </section>
 
       <footer className="mx-auto w-full max-w-6xl px-5 py-6 text-center text-xs text-text-secondary md:px-10">
-        <p>© {new Date().getFullYear()} AttendX. Built with ❤️ by Nora.</p>
+        <p>© {new Date().getFullYear()} AttendX. Built by Joshuazaza.</p>
       </footer>
     </PublicShell>
   );

@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, CalendarCheck2, Users2, TrendingUp, ArrowUpRight } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { listSessions } from "@/lib/firestore";
 import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 import { Spinner } from "@/components/ui/Spinner";
 import { SessionCard } from "@/components/molecules/SessionCard";
 import { timeAgo, parseNaijaDateTime } from "@/lib/utils";
@@ -49,36 +50,58 @@ export default function DashboardHomePage() {
         ) / 10
       : 0;
 
+  const stats = [
+    { label: "Sessions this month", value: thisMonth.length, icon: CalendarCheck2 },
+    { label: "Students marked this week", value: studentsThisWeek, icon: Users2 },
+    { label: "Avg. attendance / session", value: avgAttendance, icon: TrendingUp },
+  ];
+
   return (
     <div className="relative pb-16">
-      <h1 className="text-2xl font-bold">
-        {profile?.name ? `Welcome back, ${profile.name.split(" ")[0]}` : "Welcome back"}
-      </h1>
-      <p className="mt-1 text-sm text-text-secondary">
-        Here&apos;s what&apos;s happening with your attendance sessions.
-      </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">
+            {profile?.name ? `Welcome back, ${profile.name.split(" ")[0]}` : "Welcome back"}
+          </h1>
+          <p className="mt-1 text-sm text-text-secondary">
+            Here&apos;s what&apos;s happening with your attendance sessions.
+          </p>
+        </div>
+        <Link href="/dashboard/sessions/create" className="hidden sm:block">
+          <Button>
+            <Plus className="h-4 w-4" />
+            New session
+          </Button>
+        </Link>
+      </div>
 
       {loading ? (
         <Spinner label="Loading dashboard..." />
       ) : (
         <>
           <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <Card>
-              <p className="text-xs text-text-secondary">Sessions this month</p>
-              <p className="mt-1 text-2xl font-bold text-teal">{thisMonth.length}</p>
-            </Card>
-            <Card>
-              <p className="text-xs text-text-secondary">Students marked this week</p>
-              <p className="mt-1 text-2xl font-bold text-teal">{studentsThisWeek}</p>
-            </Card>
-            <Card>
-              <p className="text-xs text-text-secondary">Avg. attendance / session</p>
-              <p className="mt-1 text-2xl font-bold text-teal">{avgAttendance}</p>
-            </Card>
+            {stats.map(({ label, value, icon: Icon }) => (
+              <Card key={label} className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-turquoise/10 text-turquoise">
+                  <Icon className="h-4.5 w-4.5" />
+                </div>
+                <div>
+                  <p className="text-xs text-text-secondary">{label}</p>
+                  <p className="mt-0.5 text-2xl font-bold text-teal">{value}</p>
+                </div>
+              </Card>
+            ))}
           </div>
 
           <section className="mt-8">
-            <h2 className="mb-3 text-sm font-semibold text-text-secondary">Active sessions</h2>
+            <div className="mb-3 flex items-center gap-2">
+              <h2 className="text-sm font-semibold text-text-secondary">Active sessions</h2>
+              {active.length > 0 && (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-turquoise/15 px-1.5 text-[11px] font-semibold text-turquoise">
+                  {active.length}
+                </span>
+              )}
+            </div>
             {active.length === 0 ? (
               <Card className="text-center text-sm text-text-secondary">
                 No sessions live right now.{" "}
@@ -98,20 +121,29 @@ export default function DashboardHomePage() {
           <section className="mt-8">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-sm font-semibold text-text-secondary">Recent activity</h2>
-              <Link href="/dashboard/records" className="text-xs text-turquoise">
+              <Link
+                href="/dashboard/records"
+                className="flex items-center gap-0.5 text-xs font-medium text-turquoise"
+              >
                 View all
+                <ArrowUpRight className="h-3.5 w-3.5" />
               </Link>
             </div>
             {recent.length === 0 ? (
               <p className="text-sm text-text-secondary">Nothing here yet.</p>
             ) : (
-              <div className="space-y-2">
-                {recent.map((s) => (
+              <div className="overflow-hidden rounded-lg border border-teal/10 bg-card">
+                {recent.map((s, i) => (
                   <div
                     key={s.id}
-                    className="flex items-center justify-between rounded-lg border border-teal/10 bg-cream px-3 py-2.5 text-sm"
+                    className={`flex items-center gap-3 px-3.5 py-3 text-sm ${
+                      i !== 0 ? "border-t border-teal/10" : ""
+                    }`}
                   >
-                    <span className="text-teal">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cream text-xs font-semibold text-teal">
+                      {s.courseCode.slice(0, 2)}
+                    </div>
+                    <span className="min-w-0 flex-1 truncate text-teal">
                       {s.studentsMarked} students marked in {s.courseCode}
                     </span>
                     <span className="shrink-0 text-xs text-text-secondary">
@@ -128,7 +160,7 @@ export default function DashboardHomePage() {
       <Link
         href="/dashboard/sessions/create"
         aria-label="Create session"
-        className="fixed bottom-20 right-5 flex h-14 w-14 items-center justify-center rounded-full bg-turquoise text-white shadow-lg transition-transform hover:scale-105 md:bottom-8 md:right-8"
+        className="fixed bottom-20 right-5 flex h-14 w-14 items-center justify-center rounded-full bg-turquoise text-white shadow-lg transition-transform hover:scale-105 sm:hidden"
       >
         <Plus className="h-6 w-6" />
       </Link>

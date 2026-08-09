@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Plus, MapPin, RefreshCw } from "lucide-react";
 import { Input, Select } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { Toggle } from "@/components/ui/Toggle";
 import { FieldToggle } from "@/components/molecules/FieldToggle";
 import { GeofenceRadius } from "@/components/molecules/GeofenceRadius";
@@ -154,160 +155,164 @@ export function SessionCreationForm() {
 
   return (
     <div className="space-y-6 pb-24">
-      {/* Security */}
-      <div>
-        <h3 className="mb-3 text-sm font-semibold text-teal">Security</h3>
-        <div className="space-y-2.5">
-          <Toggle
-            checked={requireGeofence}
-            onChange={setRequireGeofence}
-            label="Require location to check in"
-            description="Students must be physically near you to mark attendance. Best defense against proxy attendance."
-          />
-          <div className="rounded-lg border border-teal/12 p-3.5">
-            <p className="text-sm text-text-secondary">
-              🔄 A rotating QR code every 60s and silent device fingerprinting are always on,
-              regardless of this toggle — they need no setup.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Course & timing */}
-      <div>
-        <h3 className="mb-3 text-sm font-semibold text-teal">Course & timing</h3>
-        <div className="space-y-3">
-          {!showNewCourse ? (
-            <div className="flex items-end gap-2">
-              <div className="flex-1">
-                <Select
-                  label="Course"
-                  required
-                  value={courseId}
-                  onChange={(e) => setCourseId(e.target.value)}
-                >
-                  {courses.length === 0 && <option value="">No courses yet</option>}
-                  {courses.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.code} — {c.name}
-                    </option>
-                  ))}
-                </Select>
-              </div>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => setShowNewCourse(true)}
-                className="shrink-0"
-              >
-                <Plus className="h-4 w-4" />
-                New
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-2 rounded-lg border border-teal/12 p-3">
-              <Input
-                label="Course code"
-                placeholder="CSC101"
-                value={newCourseCode}
-                onChange={(e) => setNewCourseCode(e.target.value)}
-              />
-              <Input
-                label="Course name"
-                placeholder="Introduction to Computer Science"
-                value={newCourseName}
-                onChange={(e) => setNewCourseName(e.target.value)}
-              />
-              <div className="flex gap-2">
-                <Button type="button" onClick={handleAddCourse} className="flex-1">
-                  Save course
-                </Button>
-                <Button type="button" variant="ghost" onClick={() => setShowNewCourse(false)}>
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          )}
-
-          <Input
-            label="Date"
-            type="date"
-            required
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-          <div className="grid grid-cols-2 gap-3">
-            <Input
-              label="Start time"
-              type="time"
-              required
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-            />
-            <Input
-              label="End time"
-              type="time"
-              required
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Fields */}
-      <div>
-        <h3 className="mb-3 text-sm font-semibold text-teal">Fields to capture</h3>
-        <div className="space-y-2">
-          {fields.map((field) => (
-            <FieldToggle
-              key={field.key}
-              field={field}
-              onChange={(r) => updateFieldRequirement(field.key, r)}
-              onRemove={field.custom ? () => removeCustomField(field.key) : undefined}
-            />
-          ))}
-        </div>
-        <div className="mt-2 flex gap-2">
-          <Input
-            placeholder="Add custom field (e.g. Level)"
-            value={customLabel}
-            onChange={(e) => setCustomLabel(e.target.value)}
-          />
-          <Button type="button" variant="secondary" onClick={addCustomField} className="shrink-0">
-            <Plus className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Geofence */}
-      {requireGeofence && (
-        <div>
-          <h3 className="mb-3 text-sm font-semibold text-teal">Geofence</h3>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+        {/* Course & timing */}
+        <Card>
+          <h3 className="mb-3 text-sm font-semibold text-teal">Course & timing</h3>
           <div className="space-y-3">
-            {location ? (
-              <div className="flex flex-wrap items-center gap-2">
-                <LocationPill point={location} />
-                <button
+            {!showNewCourse ? (
+              <div className="flex items-end gap-2">
+                <div className="flex-1">
+                  <Select
+                    label="Course"
+                    required
+                    value={courseId}
+                    onChange={(e) => setCourseId(e.target.value)}
+                  >
+                    {courses.length === 0 && <option value="">No courses yet</option>}
+                    {courses.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.code} — {c.name}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+                <Button
                   type="button"
-                  onClick={captureLocation}
-                  className="inline-flex items-center gap-1 text-xs text-turquoise hover:underline"
+                  variant="secondary"
+                  onClick={() => setShowNewCourse(true)}
+                  className="shrink-0"
                 >
-                  <RefreshCw className="h-3 w-3" />
-                  Recapture
-                </button>
+                  <Plus className="h-4 w-4" />
+                  New
+                </Button>
               </div>
             ) : (
-              <Button type="button" variant="secondary" loading={locating} onClick={captureLocation}>
-                <MapPin className="h-4 w-4" />
-                Capture location
-              </Button>
+              <div className="space-y-2 rounded-lg border border-teal/12 p-3">
+                <Input
+                  label="Course code"
+                  placeholder="CSC101"
+                  value={newCourseCode}
+                  onChange={(e) => setNewCourseCode(e.target.value)}
+                />
+                <Input
+                  label="Course name"
+                  placeholder="Introduction to Computer Science"
+                  value={newCourseName}
+                  onChange={(e) => setNewCourseName(e.target.value)}
+                />
+                <div className="flex gap-2">
+                  <Button type="button" onClick={handleAddCourse} className="flex-1">
+                    Save course
+                  </Button>
+                  <Button type="button" variant="ghost" onClick={() => setShowNewCourse(false)}>
+                    Cancel
+                  </Button>
+                </div>
+              </div>
             )}
-            {locationError && <p className="text-sm text-rose">{locationError}</p>}
-            <GeofenceRadius value={radius} onChange={setRadius} />
+
+            <Input
+              label="Date"
+              type="date"
+              required
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                label="Start time"
+                type="time"
+                required
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+              />
+              <Input
+                label="End time"
+                type="time"
+                required
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+              />
+            </div>
           </div>
+        </Card>
+
+        <div className="space-y-6">
+          {/* Security */}
+          <Card>
+            <h3 className="mb-3 text-sm font-semibold text-teal">Security</h3>
+            <div className="space-y-2.5">
+              <Toggle
+                checked={requireGeofence}
+                onChange={setRequireGeofence}
+                label="Require location to check in"
+                description="Students must be physically near you to mark attendance. Best defense against proxy attendance."
+              />
+              <div className="rounded-lg border border-teal/12 p-3.5">
+                <p className="text-sm text-text-secondary">
+                  🔄 A rotating QR code every 60s and silent device fingerprinting are always on,
+                  regardless of this toggle — they need no setup.
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Fields */}
+          <Card>
+            <h3 className="mb-3 text-sm font-semibold text-teal">Fields to capture</h3>
+            <div className="space-y-2">
+              {fields.map((field) => (
+                <FieldToggle
+                  key={field.key}
+                  field={field}
+                  onChange={(r) => updateFieldRequirement(field.key, r)}
+                  onRemove={field.custom ? () => removeCustomField(field.key) : undefined}
+                />
+              ))}
+            </div>
+            <div className="mt-2 flex gap-2">
+              <Input
+                placeholder="Add custom field (e.g. Level)"
+                value={customLabel}
+                onChange={(e) => setCustomLabel(e.target.value)}
+              />
+              <Button type="button" variant="secondary" onClick={addCustomField} className="shrink-0">
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+          </Card>
+
+          {/* Geofence */}
+          {requireGeofence && (
+            <Card>
+              <h3 className="mb-3 text-sm font-semibold text-teal">Geofence</h3>
+              <div className="space-y-3">
+                {location ? (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <LocationPill point={location} />
+                    <button
+                      type="button"
+                      onClick={captureLocation}
+                      className="inline-flex items-center gap-1 text-xs text-turquoise hover:underline"
+                    >
+                      <RefreshCw className="h-3 w-3" />
+                      Recapture
+                    </button>
+                  </div>
+                ) : (
+                  <Button type="button" variant="secondary" loading={locating} onClick={captureLocation}>
+                    <MapPin className="h-4 w-4" />
+                    Capture location
+                  </Button>
+                )}
+                {locationError && <p className="text-sm text-rose">{locationError}</p>}
+                <GeofenceRadius value={radius} onChange={setRadius} />
+              </div>
+            </Card>
+          )}
         </div>
-      )}
+      </div>
 
       <div className="fixed inset-x-0 bottom-16 border-t border-teal/10 bg-cream/95 p-4 backdrop-blur md:static md:border-0 md:bg-transparent md:p-0">
         <div className="mx-auto flex max-w-5xl gap-3">
