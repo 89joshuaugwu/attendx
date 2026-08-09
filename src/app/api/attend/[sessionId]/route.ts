@@ -73,14 +73,15 @@ export async function GET(
 
 interface SubmitBody {
   qrToken: string;
-  regNumber: string;
-  firstName: string;
-  surname: string;
+  regNumber?: string;
+  firstName?: string;
+  surname?: string;
   middleName?: string;
   phone?: string;
   email?: string;
   location?: { lat: number; lng: number; accuracy: number };
   fingerprint: string;
+  [key: string]: unknown;
 }
 
 export async function POST(
